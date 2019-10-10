@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="../JS/RegisteredMember.js"></script>
+
+<link rel="stylesheet" href="../CSS/RegisteredMember.css">
+<script src="https://kit.fontawesome.com/685268963f.js"></script>
+</head>
+
+<body>
+
+
+	<form action="../RegisteredMember.do" method="post">
+
+		<fieldset>
+			<legend>
+				申請帳號<em>必填</em>
+			</legend>
+			<div class="div1">
+				<label class='label1'>帳號:</label><input type="text" id="account"
+					name="account"><i id="check" class="fas fa-clipboard-check"></i><span
+					id="account_msg"></span>
+			</div>
+			<div class="div1">
+				<label class='label1'>密碼:</label><input type="password"
+					id="password" name="password"><i onclick="showHide();"
+					id="eye" class="fas fa-eye"></i><span id="msg_password"></span>
+
+				</button>
+				<h6 style="color: gray; font-size: 8px">(1.不可空白，2.至少六個字包含英文字母，數字，特殊字元(!@#$%^&*))</h6>
+			</div>
+
+			<div class="div1">
+				<label class='label1'>姓名:</label><input type="text" id="username"
+					name="username"><span id="msg"></span>
+				<h6 style="color: gray; font-size: 8px">(1.不可空白，2.至少兩個字以上，3.必須為中文字)</h6>
+			</div>
+
+			<div style="margin: auto auto; width: 60%">
+				<button type="button" style="background-color: #0066FF"
+					class="btn btn-facebook" onclick="FBLogin();">
+					<i class="fab fa-facebook-f fa-lg"></i> Facebook註冊
+				</button>
+				<button type="button" style="background-color: #FF3333"
+					class="btn btn-google" onclick="GoogleLogin();">
+					<i class="fab fa-google-plus-g fa-lg"></i> Google註冊
+				</button>
+			</div>
+			<script type="text/javascript">
+				//應用程式編號，進入 https://developers.facebook.com/apps/ 即可看到
+				let FB_appID = "689357491476626";
+
+				//FB Login 官方文件：https://developers.facebook.com/docs/facebook-login/web
+
+				// Load the Facebook Javascript SDK asynchronously
+				(function(d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id))
+						return;
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "https://connect.facebook.net/en_US/sdk.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+
+				window.fbAsyncInit = function() {
+					FB.init({
+						appId : FB_appID,//FB appID
+						cookie : true, // enable cookies to allow the server to access the session
+
+						xfbml : true, // parse social plugins on this page
+						version : 'v3.0' // use graph api version
+					});
+
+				};
+
+				//使用自己客製化的按鈕來登入
+				function FBLogin() {
+
+					FB
+							.login(
+									function(response) {
+										//debug用
+										console.log(response);
+										if (response.status === 'connected') {
+
+											FB
+													.api(
+															'/me',
+															{
+																locale : 'zh_TW',
+																fields : 'name, email,id'
+															},
+															function(response) {
+																console
+																		.log('Good to see you, '
+																				+ response.name
+																				+ '.');
+																console
+																		.log('id, '
+																				+ response.id
+																				+ '.');
+																console
+																		.log(response.email);
+																location.href = "http://localhost:8080/Member/member/insertMemberDetail.jsp?account="
+																		+ response.email
+																		+ "&username="
+																		+ response.name
+
+															});
+										} else {
+											// user FB取消授權
+											alert("Facebook帳號無法登入");
+										}
+									}, {
+										scope : 'public_profile,email'
+									});
+
+				}
+			</script>
+
+
+
+			<!--Google登入-->
+			<script async defer src="https://apis.google.com/js/api.js"
+				onload="this.onload=function(){};HandleGoogleApiLibrary()"
+				onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
+			<script type="text/javascript">
+				//進入 https://console.developers.google.com/，找「憑證」頁籤(記得先選對專案)，即可找到用戶端ID
+				let Google_appId = "894099305493-6e891p90q17r6rf2114i0f8b4gr8f51l.apps.googleusercontent.com";
+
+				//參考文章：http://usefulangle.com/post/55/google-login-javascript-api 
+
+				// Called when Google Javascript API Javascript is loaded
+				function HandleGoogleApiLibrary() {
+					// Load "client" & "auth2" libraries
+					gapi
+							.load(
+									'client:auth2',
+									{
+										callback : function() {
+											// Initialize client & auth libraries
+											gapi.client
+													.init(
+															{
+																clientId : Google_appId,
+																scope : 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.me'
+															})
+													.then(
+															function(success) {
+
+																console
+																		.log("Google Libraries are initialized successfully");
+															},
+															function(error) {
+																// Error occurred
+																console
+																		.log(error);// to find the reason 
+															});
+										},
+										onerror : function() {
+											// Failed to load libraries
+											console
+													.log("Failed to load libraries");
+										}
+									});
+				}
+
+				function GoogleLogin() {
+					// API call for Google login  
+					gapi.auth2
+							.getAuthInstance()
+							.signIn()
+							.then(
+									function(success) {
+										// API call to get user information
+										gapi.client
+												.request(
+														{
+															path : 'https://www.googleapis.com/plus/v1/people/me'
+														})
+												.then(
+														// On success
+														function(success) {
+															console
+																	.log(success);
+															var user_info = JSON
+																	.parse(success.body);
+															console
+																	.log(user_info);
+															console
+																	.log(user_info.displayName);
+															console
+																	.log(user_info.id);
+															console
+																	.log(user_info.gender);
+															console
+																	.log(user_info.emails[0].value);
+
+															location.href = "http://localhost:8080/Member/member/insertMemberDetail.jsp?account="
+																	+ user_info.emails[0].value
+																	+ "&username="
+																	+ user_info.displayName
+															// $("#user-information div").eq(0).find("span").text(user_info.displayName);
+															// $("#user-information div").eq(1).find("span").text(user_info.id);
+															// $("#user-information div").eq(2).find("span").text(user_info.gender);
+															// $("#user-information div").eq(3).find("span").html('<img src="' + user_info.image.url + '" />');
+															// $("#user-information div").eq(4).find("span").text(user_info.emails[0].value);
+
+															// $("#user-information").show();
+															// $("#login-button").hide();
+														},
+														// On error
+														function(error) {
+															$("#login-button")
+																	.removeAttr(
+																			'disabled');
+															alert('Error : Failed to get user user information');
+														});
+
+									}, function(error) {
+										// Error occurred
+										// console.log(error) to find the reason
+										console.log(error);
+									});
+
+				}
+			</script>
+
+			<!--有些網站會做帳號和user FB帳號的綁定/解除綁定，或你想讓使用者刪除你的FB App，讓使用者下次可以切換不同FB帳號登入你的網站-->
+			<!--下面程式碼派得上用場-->
+			<script type="text/javascript">
+				//刪除使用者已授權你的FB App，好讓使用者下次重新授權你的FB App
+				//參考：https://stackoverflow.com/questions/6634212/remove-the-application-from-a-user-using-graph-api/7741978#7741978
+				function Del_FB_App() {
+					FB.getLoginStatus(function(response) {//取得目前user是否登入FB網站
+						//debug用
+						console.log(response);
+						if (response.status === 'connected') {
+							// Logged into Facebook.
+							//抓userID
+							FB.api("/me/permissions", "DELETE", function(
+									response) {
+								console.log("刪除結果");
+								console.log(response); //gives true on app delete success 
+							});
+						} else {
+							// FB取消授權
+							console.log("無法刪除FB App");
+						}
+					});
+
+				}
+			</script>
+
+			<!--類似上面Delete FB App的效果，呼叫此function後，下次使用者想再Google登入你的網站就必須重新選擇帳號-->
+			<script type="text/javascript">
+				//參考：https://developers.google.com/identity/sign-in/web/disconnect
+
+				function Google_disconnect() {
+					var auth2 = gapi.auth2.getAuthInstance();
+					auth2.disconnect().then(function() {
+						console.log('User disconnect.');
+					});
+				}
+			</script>
+			<div id="submit" class="div1" style="text-align: center">
+				<button type="submit" disabled>註冊</button>
+
+			</div>
+		</fieldset>
+	</form>
+
+</body>
+
+</html>
