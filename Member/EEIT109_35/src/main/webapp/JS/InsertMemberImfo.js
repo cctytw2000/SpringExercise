@@ -50,8 +50,7 @@ function check_birth() {
 }
 
 function opencreate() {
-	console.log("opencreate")
-	console.log("account_check_val_repeat==="+account_check_val_repeat)
+
 	if (address_check_val && birth_check_val && idnumber_check_val) {
 		document.getElementById("submit").innerHTML = "<button type='submit'>新增</button>";
 	}

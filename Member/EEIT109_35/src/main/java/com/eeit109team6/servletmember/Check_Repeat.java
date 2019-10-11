@@ -26,6 +26,8 @@ public class Check_Repeat extends HttpServlet {
 
 
 		String account = request.getParameter("account");
+		
+		System.out.println("account="+account);
 		IMemberDao MEMDaoF = null;
 		Member m = context.getBean(Member.class);
 		m.setAccount(account);

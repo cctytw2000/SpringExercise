@@ -23,6 +23,18 @@
 	</servlet-mapping>
 
 	
+		<servlet>
+		<servlet-name>demoFBOrGoogleLogin</servlet-name>
+		<servlet-class>com.eeit109team6.servletmember.FBOrGoogleLogin</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>demoFBOrGoogleLogin</servlet-name>
+		<url-pattern>/FBOrGoogleLogin.do</url-pattern>
+	</servlet-mapping>
+	
+	
+	
+	
 	
 	<servlet>
 		<servlet-name>LoginMember</servlet-name>

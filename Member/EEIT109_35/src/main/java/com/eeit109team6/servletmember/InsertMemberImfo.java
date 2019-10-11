@@ -59,10 +59,10 @@ public class InsertMemberImfo extends HttpServlet {
 
 			try {
 				Member member = MemDao.fintById(mem);
-				MemDao.openActive(mem);
 				md.setMember(member);
 				MDDao.add(md);
 				System.out.println("資料新增完成");
+				MemDao.openActive(member);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,8 +84,6 @@ public class InsertMemberImfo extends HttpServlet {
 					.replace(" ", "");
 			// ==============/密碼加密=======================
 
-			
-			
 			// ==============設定token====================
 			KeyGenerator keyGen;
 			String tokenFormat = null;
@@ -99,16 +97,13 @@ public class InsertMemberImfo extends HttpServlet {
 				Long math = Long.valueOf((long) (Math.random() * 999999999));
 				String token_notformat = AES_CBC_PKCS5PADDING.Encrypt(secretKey, iv, math.toString());
 				tokenFormat = token_notformat.replaceAll("[\\pP\\p{Punct}]", "").replace(" ", "");
-				
+
 			} catch (Exception e) {
 
 				e.printStackTrace();
 			}
 			// ==============/設定token====================
-			
-			
-			
-			
+
 			IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 			IMemberDetailDao MDDao = (IMemberDetailDao) context.getBean("memberDetailDaoJdbcImpl");
 
@@ -121,7 +116,7 @@ public class InsertMemberImfo extends HttpServlet {
 			mem.setPassword(password_AES);
 			mem.setRegisteredtime(registeredtime);
 			mem.setToken(tokenFormat);
-			
+
 			md.setAddress(alladdress);
 			md.setBirth(birth);
 			md.setIdnumber(idnumber);
@@ -137,8 +132,10 @@ public class InsertMemberImfo extends HttpServlet {
 			md.setMember(mem);
 
 			try {
-				MemDao.add(mem);
-				
+				int insertMemberId = MemDao.add(mem);
+				mem.setMember_id(insertMemberId);
+				MemDao.openActive(mem);
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
