@@ -47,14 +47,14 @@ function FBLogin() {
 						type: "POST",
 						success: function (data) {
 							if (data == "true") {
-								location.href = "http://localhost:8080/Member/member/insertMemberDetail.jsp?account="
+								location.href = "http://localhost:8080/EEIT109_35/Member/member/insertMemberDetail.jsp?account="
 									+ response.email
 									+ "&username="
 									+ response.name
 								alert("您可以使用此帳號");
 							} else {
 								alert("此帳號已重複註冊，請登入")
-								location.href = "http://localhost:8080/Member/member/LoginMember.jsp"
+								location.href = "http://localhost:8080/EEIT109_35/member/LoginMember.jsp"
 							}
 
 							console.log(data)
@@ -128,7 +128,7 @@ function GoogleLogin() {
 						console.log(user_info.gender);
 						console.log(user_info.emails[0].value);
 
-						location.href = "http://localhost:8080/Member/member/insertMemberDetail.jsp?account="
+						location.href = "http://localhost:8080/EEIT109_35/member/insertMemberDetail.jsp?account="
 							+ user_info.emails[0].value
 							+ "&username="
 							+ user_info.displayName

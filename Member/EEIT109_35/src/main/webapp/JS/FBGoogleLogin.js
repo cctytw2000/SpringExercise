@@ -145,11 +145,11 @@ function check_Login(account, username) {
 		success: function (data) {
 			if (data == "true") {
 				console.log(data);
-				location.href = "http://localhost:8080/Member/home.jsp"
+				location.href = "http://localhost:8080/EEIT109_35/home.jsp"
 			} else {
 				console.log(data);
 				alert("此帳號沒註冊請至註冊頁面註冊")
-				location.href = "http://localhost:8080/Member/member/RegisteredMember.html"
+				location.href = "http://localhost:8080/EEIT109_35/member/RegisteredMember.html"
 				
 			}
 		}
