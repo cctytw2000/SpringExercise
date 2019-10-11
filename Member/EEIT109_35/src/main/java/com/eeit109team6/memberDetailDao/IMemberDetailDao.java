@@ -3,6 +3,8 @@ package com.eeit109team6.memberDetailDao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.eeit109team6.memberDao.Member;
+
 public interface IMemberDetailDao {
 	public void add(MemberDetail md) throws SQLException;
 
@@ -12,6 +14,6 @@ public interface IMemberDetailDao {
 
 	public ArrayList<MemberDetail> fintAll() throws SQLException;
 
-	public MemberDetail fintById(MemberDetail md) throws SQLException;
+	public MemberDetail fintById(Member m) throws SQLException;
 
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -78,6 +79,7 @@ public class MemberDetail {
 
 	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Member")
 	public Member getMember() {
 		return member;
 	}

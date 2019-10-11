@@ -4,11 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.annotation.Resource;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.mail.Authenticator;
@@ -25,14 +23,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.eeit109team6.memberDao.HibernateUtil;
 import com.eeit109team6.memberDao.IMemberDao;
 import com.eeit109team6.memberDao.Member;
-import com.eeit109team6.memberDao.MemberDaoFactoery;
 
 @WebServlet("/FerGetPWD")
 public class FerGetPWD extends HttpServlet {
@@ -45,10 +42,16 @@ public class FerGetPWD extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
-
+		
+		
+		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		Member mem = context.getBean(Member.class);
+		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
+		
 		String account = request.getParameter("account");
 
-		Member mem = new Member();
+	
+		
 		KeyGenerator keyGen;
 		try {
 			keyGen = KeyGenerator.getInstance("AES");
@@ -68,14 +71,14 @@ public class FerGetPWD extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		IMemberDao MEMDao = null;
+		
 
-		sessionFactory = HibernateUtil.getSessionfactory();
+		
 
 		try {
-			MEMDao = MemberDaoFactoery.createMember(sessionFactory);
+	
 
-			MEMDao.forgetPwd(mem);
+			MemDao.forgetPwd(mem);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,11 +120,17 @@ public class FerGetPWD extends HttpServlet {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(""));
+			message.setFrom(new InternetAddress(Email));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(account));
+			
+			
+			String url = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/member/forgetPWDInsertNewPassowrd.jsp?account=" + account + 
+					 "&token=" + mem.getToken();
+			
+			
+			
 			message.setSubject("忘記密碼");
-			message.setText("http://localhost:8090/EEIT109_35/member/forgetPWDInsertNewPassowrd.jsp?account=" + account
-					+ "&token=" + mem.getToken());
+			message.setText(url);
 
 			Transport transport = session.getTransport("smtp");
 			transport.connect(host, port, Email, EmailPwd);

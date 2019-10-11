@@ -32,9 +32,8 @@
 				</ul>
 			</nav>
 			
-		<jsp:useBean id="member" scope="request"
-			class="com.eeit109team6.memberDao.Member" />
-		
+		<jsp:useBean id="member" scope="request" class="com.eeit109team6.memberDao.Member" />
+		<jsp:useBean id="memberDetail" scope="request" class="com.eeit109team6.memberDetailDao.MemberDetail" />
 		</header>
 		
 		
@@ -44,9 +43,9 @@
             <section>
               <table border="1" style="border : 1px solid black;width : 50%;text-align: center;margin : 15px auto">
               <tr><td>姓名：</td><td>${member.getUsername()}</td></tr>
-              <tr><td>身分證字號：</td><td>${member.getIdnumber()}</td></tr>
-              <tr><td>姓名：</td><td>${member.getSex()}</td></tr>
-              <tr><td>生日：</td><td>${member.getBirth()}</td></tr>
+              <tr><td>身分證字號：</td><td>${memberDetail.getIdnumber()}</td></tr>
+              <tr><td>姓名：</td><td>${memberDetail.getSex()}</td></tr>
+              <tr><td>生日：</td><td>${memberDetail.getBirth()}</td></tr>
               
               
               
