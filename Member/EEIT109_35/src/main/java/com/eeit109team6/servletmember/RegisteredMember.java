@@ -168,8 +168,15 @@ public class RegisteredMember extends HttpServlet {
 				message.setFrom(new InternetAddress(Email));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(account));
 				message.setSubject("驗證信");
-				message.setText("Wellcome To FootBook \n http://localhost:8080/Member/member/insertMemberDetail.jsp?id=" + memberId
-						+ "&token=" + mem.getToken());
+				
+				
+				
+				String url = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/member/insertMemberDetail.jsp?id=" + memberId + 
+						 "&token=" + mem.getToken();
+				
+				System.out.println("url="+url);
+				
+				message.setText("Wellcome To FootBook \n"+url);
 
 				Transport transport = session.getTransport("smtp");
 				transport.connect(host, port, Email, EmailPwd);

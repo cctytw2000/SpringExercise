@@ -63,6 +63,12 @@ public class InsertMemberImfo extends HttpServlet {
 				MDDao.add(md);
 				System.out.println("資料新增完成");
 				MemDao.openActive(member);
+				request.setAttribute("msg", "已開通帳號請至登入頁面登入");
+				RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
+				rd.forward(request, response);
+				
+				
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
