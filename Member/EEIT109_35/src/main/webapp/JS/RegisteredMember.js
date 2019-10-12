@@ -6,14 +6,14 @@ let account_check_val_repeat = false;
 
 let pwShown = 0;
 document.addEventListener("DOMContentLoaded", function () {
-	document.getElementById("account").addEventListener("blur", check_account);
-	document.getElementById("account").addEventListener("blur", opencreate);
+	document.getElementById("account").addEventListener("input", check_account);
+	document.getElementById("account").addEventListener("input", opencreate);
 
-	document.getElementById("password").addEventListener("blur", check_password);
-	document.getElementById("password").addEventListener("blur", opencreate);
+	document.getElementById("password").addEventListener("input", check_password);
+	document.getElementById("password").addEventListener("input", opencreate);
 	
-	document.getElementById("username").addEventListener("blur", check_username); 
-	document.getElementById("username").addEventListener("blur", opencreate);
+	document.getElementById("username").addEventListener("input", check_username); 
+	document.getElementById("username").addEventListener("input", opencreate);
 
 
 	

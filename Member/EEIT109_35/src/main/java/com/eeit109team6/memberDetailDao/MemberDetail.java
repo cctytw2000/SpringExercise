@@ -12,11 +12,13 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.eeit109team6.memberDao.Member;
 
 @Component(value = "memberDetail")
+@Scope(value = "prototype")
 @Entity
 @Table(name = "memberDetail")
 public class MemberDetail {
@@ -26,6 +28,8 @@ public class MemberDetail {
 	private String birth;
 	private String address;
 	private Member member;
+	
+	
 
 	@Id
 	@Column(name = "MEMBERID")
@@ -79,7 +83,6 @@ public class MemberDetail {
 
 	@PrimaryKeyJoinColumn
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member")
 	public Member getMember() {
 		return member;
 	}

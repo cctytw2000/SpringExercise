@@ -7,14 +7,14 @@ let pwShown = 0;
 document.addEventListener("DOMContentLoaded", function () {
 
 
-	document.getElementById("alladdress").addEventListener("blur", check_address);
-	document.getElementById("alladdress").addEventListener("blur", opencreate);
+	document.getElementById("alladdress").addEventListener("input", check_address);
+	document.getElementById("alladdress").addEventListener("input", opencreate);
 
-	document.getElementById("idnumber").addEventListener("blur", check_idnumber);
-	document.getElementById("idnumber").addEventListener("blur", opencreate);
+	document.getElementById("idnumber").addEventListener("input", check_idnumber);
+	document.getElementById("idnumber").addEventListener("input", opencreate);
 
-	document.getElementById("date").addEventListener("blur", check_birth);
-	document.getElementById("date").addEventListener("blur", opencreate);
+	document.getElementById("date").addEventListener("input", check_birth);
+	document.getElementById("date").addEventListener("input", opencreate);
 
 	
 

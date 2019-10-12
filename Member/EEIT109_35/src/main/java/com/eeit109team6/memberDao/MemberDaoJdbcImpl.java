@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 @Transactional
 @Repository
 public class MemberDaoJdbcImpl implements IMemberDao {
@@ -27,10 +28,10 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public int add(Member m) throws SQLException {
+	public void add(Member m) throws SQLException {
 		System.out.println("sessionFactory" + sessionFactory);
 		sessionFactory.getCurrentSession().save(m);
-		return m.getMember_id();
+	
 
 	}
 
@@ -57,9 +58,8 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 
 	@Override
 	public ArrayList<Member> fintAll() throws SQLException {
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from Member");
-		ArrayList<Member> member=(ArrayList<Member>) query.getResultList();
+		Query query = sessionFactory.getCurrentSession().createQuery("from Member");
+		ArrayList<Member> member = (ArrayList<Member>) query.getResultList();
 		return member;
 	}
 
@@ -67,8 +67,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	public Member fintById(Member m) throws SQLException {
 
 		List<Member> memList = null;
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from Member where member_id = ?1 ");
+		Query query = sessionFactory.getCurrentSession().createQuery("from Member where member_id = ?1 ");
 		query.setParameter(1, m.getMember_id());
 		memList = (List<Member>) query.getResultList();
 
@@ -83,11 +82,13 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 
 	@Override
 	public Member login(Member m) throws SQLException {
+//		System.out.println("Login  type="+m.getType());
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from Member where account = ?1 and password = ?2 and isactive = 1");
+				.createQuery("from Member where account = ?1 and password = ?2 and type = ?3 and isactive = 1");
 		query.setParameter(1, m.getAccount());
 		query.setParameter(2, m.getPassword());
+		query.setParameter(3, m.getType());
 		memList = (List<Member>) query.getResultList();
 		if (memList.size() != 0) {
 
@@ -102,8 +103,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	public boolean openActive(Member m) throws SQLException {
 
 		List<Member> memList = null;
-		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from Member where member_id = ?1 and token = ?2");
+		Query query = sessionFactory.getCurrentSession().createQuery("from Member where member_id = ?1 and token = ?2");
 		query.setParameter(1, m.getMember_id());
 		query.setParameter(2, m.getToken());
 		memList = (List<Member>) query.getResultList();
@@ -118,17 +118,23 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public void forgetPwd(Member m) throws SQLException {
+	public boolean forgetPwd(Member m) throws SQLException {
 
 		List<Member> memList = null;
-		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account = ?1");
+		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account = ?1 and type = ?2");
 		query.setParameter(1, m.getAccount());
+		query.setParameter(2, m.getType());
 
 		memList = (List<Member>) query.getResultList();
 
 		if (memList.size() != 0) {
 			memList.get(0).setToken(m.getToken());
+			return true ;
+		} else {
+			System.out.println("忘記密碼===找不到帳號");
+			return false;
 		}
+		
 
 	}
 
@@ -136,10 +142,10 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	public void changePwd(Member m) throws SQLException {
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession()
-				.createQuery("from Member where account =?1  and token = ?2");
+				.createQuery("from Member where account =?1  and token = ?2 and type= ?3");
 		query.setParameter(1, m.getAccount());
 		query.setParameter(2, m.getToken());
-
+		query.setParameter(3, m.getType());
 		memList = (List<Member>) query.getResultList();
 
 		if (memList.size() != 0) {
@@ -150,9 +156,11 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 
 	@Override
 	public boolean checkAccount(Member m) throws SQLException {
+		System.out.println("此帳號為" + m.getType() + "帳號");
 		List<Member> memList = null;
-		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account =?1");
+		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account =?1 and type = ?2");
 		query.setParameter(1, m.getAccount());
+		query.setParameter(2, m.getType());
 		memList = (List<Member>) query.getResultList();
 
 		if (memList.size() != 0) {

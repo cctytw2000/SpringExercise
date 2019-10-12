@@ -38,7 +38,7 @@ function FBLogin() {
 					console.log('Good to see you, ' + response.name + '.');
 					console.log('id, ' + response.id + '.');
 					console.log(response.email);
-					check_Login(response.email, response.name)
+					check_Login(response.email, response.name,"Facebook")
 				});
 		} else {
 			// user FB取消授權
@@ -111,7 +111,7 @@ function GoogleLogin() {
 						console.log(user_info.gender);
 						console.log(user_info.emails[0].value);
 
-						check_Login(user_info.emails[0].value, user_info.displayName)
+						check_Login(user_info.emails[0].value, user_info.displayName,"Google")
 
 
 					},
@@ -134,12 +134,13 @@ function GoogleLogin() {
 
 
 
-function check_Login(account, username) {
+function check_Login(account, username , type) {
 	$.ajax({
 		url: "../FBOrGoogleLogin.do",
 		data: {
 			account: account,
-			username: username
+			username: username,
+			type : type
 		},
 		type: "POST",
 		success: function (data) {

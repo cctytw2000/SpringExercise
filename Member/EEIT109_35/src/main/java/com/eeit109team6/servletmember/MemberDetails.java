@@ -2,7 +2,6 @@ package com.eeit109team6.servletmember;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -25,9 +22,6 @@ import com.eeit109team6.memberDetailDao.MemberDetail;
 @WebServlet("/MemberDetails")
 public class MemberDetails extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private SessionFactory sessionFactory;
-	private Session hbSession;
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
@@ -59,13 +53,14 @@ public class MemberDetails extends HttpServlet {
 			
 			Member member = MemDao.fintById(mem);
 			MemberDetail memberDetails = MDDao.fintById(mem);
+			System.out.println("memberDetails  address="+memberDetails.getAddress());
 			request.setAttribute("memberDetail", memberDetails);
 			request.setAttribute("member", member);
 			RequestDispatcher rd = request.getRequestDispatcher("member/memberDetails.jsp");
 
 			rd.forward(request, response);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 

@@ -57,6 +57,7 @@ public class MemberDetailDaoJdbcImpl implements IMemberDetailDao {
 		List<MemberDetail> memList = null;
 		Query query = sessionFactory.getCurrentSession()
 				.createQuery("from MemberDetail where memberID = ?1 ");
+		System.out.println(" m.getMember_id()="+ m.getMember_id());
 		query.setParameter(1, m.getMember_id());
 		memList = (List<MemberDetail>) query.getResultList();
 

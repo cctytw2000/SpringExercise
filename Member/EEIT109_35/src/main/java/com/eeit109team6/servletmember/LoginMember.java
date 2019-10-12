@@ -40,15 +40,17 @@ public class LoginMember extends HttpServlet {
 
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
+		String type = "General";
+
 		
 		if (account == null || account.trim().length() == 0) {
 			response.getWriter().write("<script>alert('帳號必須填入');history.go(-1);</script>");
-			return ;
+			return;
 		}
 		// 如果 password 欄位為空白，放一個錯誤訊息到 errorMsgMap 之內
 		if (password == null || password.trim().length() == 0) {
 			response.getWriter().write("<script>alert('密碼必須填入');history.go(-1);</script>");
-			return ;
+			return;
 		}
 
 		String key = "MickeyKittyLouis";
@@ -61,12 +63,9 @@ public class LoginMember extends HttpServlet {
 		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 		mem.setAccount(account);
 		mem.setPassword(password_AES);
-	
-
-		
+		mem.setType(type);
 
 		try {
-		
 
 			Member member = MemDao.login(mem);
 

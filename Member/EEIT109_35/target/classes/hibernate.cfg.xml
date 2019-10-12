@@ -11,9 +11,11 @@
 		<!-- 自動產生資料庫的Schema -->
 		<property name="hbm2ddl.auto">update</property>
 		<!-- 顯示實際操作資料庫時的SQL -->
-		<property name="show_sql">true</property>
+		<!-- <property name="show_sql">true</property> -->
+		
 		<!-- 將顯示的SQL排版，方便觀看 -->
-		<property name="format_sql">true</property>
+		<!-- <property name="format_sql">true</property> -->
+		
 
 		<!-- <property name="hibernate.current_session_context_class">thread</property> -->
 		<!-- 定義程式交易管理的類型，本範例使用JDBC Transaction -->
@@ -22,9 +24,13 @@
 		<!-- hibernate 相關效能設定 -->
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
 		<property name="connection_pool_size">8</property>
-		<mapping class="com.eeit109team6.memberDao.Member" />
 		
+		
+		
+		<!--  
+		<mapping class="com.eeit109team6.memberDao.Member" />
 		<mapping class="com.eeit109team6.memberDetailDao.MemberDetail" />
+		-->
 		<!-- 3. 宣告程式使用的Mapping檔 ，每個永續類別都需要定義一個Mapping檔 -->
 		<!-- <mapping class="_01_register.model.MemberBean"></mapping> -->
 		<!-- <mapping class="_03_listBooks.model.BookBean"></mapping> -->

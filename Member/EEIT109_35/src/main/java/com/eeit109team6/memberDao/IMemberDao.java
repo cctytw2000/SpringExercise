@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public interface IMemberDao {
 
-	public int add(Member m) throws SQLException;
+	public void add(Member m) throws SQLException;
 
 	public void update(Member m) throws SQLException;
 
@@ -19,7 +19,7 @@ public interface IMemberDao {
 
 	public boolean openActive(Member m) throws SQLException;
 
-	public void forgetPwd(Member m) throws SQLException;
+	public boolean forgetPwd(Member m) throws SQLException;
 
 	public void changePwd(Member m) throws SQLException;
 

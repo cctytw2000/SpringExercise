@@ -42,9 +42,9 @@ public class OpenSessionViewFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		this.config = filterConfig;
-		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(filterConfig.getServletContext());
-		sessionFactory = (SessionFactory)context.getBean("sessionFactory", SessionFactory.class);
+//		this.config = filterConfig;
+//		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(filterConfig.getServletContext());
+//		sessionFactory = (SessionFactory)context.getBean("sessionFactory", SessionFactory.class);
 
 		
 	}

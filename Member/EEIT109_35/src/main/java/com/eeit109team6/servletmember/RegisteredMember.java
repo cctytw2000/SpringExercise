@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.hibernate.SessionFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -43,7 +42,6 @@ public class RegisteredMember extends HttpServlet {
 	@Resource(name = "jdbc/team6project")
 	private DataSource ds;
 	Connection conn;
-	private SessionFactory sessionFactory;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -55,12 +53,15 @@ public class RegisteredMember extends HttpServlet {
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		String username = request.getParameter("username");
+		String type = request.getParameter("type");
 
 		// ==============================/取值=======================
 
-
 		// ===============================處理資料====================
 		if (account != "" && password != "") {
+			if (type == null || type.length() == 0) {
+				type = "General";
+			}
 
 			// ==============設定創建帳號時間=======================
 			Calendar rightNow = Calendar.getInstance();
@@ -85,6 +86,8 @@ public class RegisteredMember extends HttpServlet {
 			mem.setAccount(account);
 			mem.setPassword(password_AES);
 			mem.setUsername(username);
+
+			mem.setType(type);
 
 			mem.setRegisteredtime(registeredtime);
 			mem.setIsactive(isactive);
@@ -112,26 +115,21 @@ public class RegisteredMember extends HttpServlet {
 			// ==============寫進資料庫===================
 
 			IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
-			
-			
-		
-			ArrayList<Member> members = null ;
+
+			ArrayList<Member> members = null;
 			Integer memberId = null;
 			try {
 				memberId = MemDao.add(mem);
-				members =MemDao.fintAll();
-				
+				members = MemDao.fintAll();
+
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-			for (Member member:members) {
-				System.out.println("帳號="+member.getAccount());
+			for (Member member : members) {
+				System.out.println("帳號=" + member.getAccount());
 			}
-			
-			
-			
+
 			String email = null;
 			String pwd = null;
 
@@ -164,19 +162,14 @@ public class RegisteredMember extends HttpServlet {
 
 			try {
 
+				String url = "http://" + request.getServerName() + ":" + request.getServerPort()
+						+ request.getContextPath() + "/member/insertMemberDetail.jsp?id=" + memberId + "&token="
+						+ mem.getToken();
 				Message message = new MimeMessage(session);
 				message.setFrom(new InternetAddress(Email));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(account));
 				message.setSubject("驗證信");
-				
-				
-				
-				String url = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/member/insertMemberDetail.jsp?id=" + memberId + 
-						 "&token=" + mem.getToken();
-				
-				System.out.println("url="+url);
-				
-				message.setText("Wellcome To FootBook \n"+url);
+				message.setText("Wellcome To FootBook \n" + url);
 
 				Transport transport = session.getTransport("smtp");
 				transport.connect(host, port, Email, EmailPwd);
@@ -196,9 +189,8 @@ public class RegisteredMember extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.write("<script>alert('你是不是想找麻煩!');history.go(-1);</script>");
 			out.close();
-		} 
-	
-		
+		}
+
 		// ===============================/處理資料====================
 
 	}

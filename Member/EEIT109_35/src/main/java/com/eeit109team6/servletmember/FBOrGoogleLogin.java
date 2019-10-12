@@ -29,7 +29,7 @@ public class FBOrGoogleLogin extends HttpServlet {
 		HttpSession session = request.getSession();
 		String account = request.getParameter("account");
 		String username = request.getParameter("username");
-		
+		String type = request.getParameter("type");
 		System.out.println("account="+account);
 		System.out.println("username="+username);
 		
@@ -43,7 +43,7 @@ public class FBOrGoogleLogin extends HttpServlet {
 		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 		mem.setAccount(account);
 		mem.setPassword(password_AES);
-		
+		mem.setType(type);
 		
 		System.out.println("account="+account);
 		System.out.println("password_AES="+password_AES);

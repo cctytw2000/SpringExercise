@@ -27,7 +27,8 @@
 						</c:when>
 						<c:otherwise>
 					<input type="hidden" name="account" value="${param.account}"> 
-			<input type="hidden" name="username" value="${param.username}">
+					<input type="hidden" name="username" value="${param.username}">
+					<input type="hidden" name="type" value="${param.type}">
 						</c:otherwise>
 
 					</c:choose>

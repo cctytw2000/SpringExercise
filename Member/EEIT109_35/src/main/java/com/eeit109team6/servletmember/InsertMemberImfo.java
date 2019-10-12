@@ -40,9 +40,11 @@ public class InsertMemberImfo extends HttpServlet {
 		String alladdress = request.getParameter("alladdress");
 		String sex = request.getParameter("sex");
 		String birth = request.getParameter("birth");
-
+		
+		
+		
 		if (memberID != null && token != null) {
-
+			System.out.println("一般帳號");
 			WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 			Member mem = context.getBean(Member.class);
 			IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
@@ -60,6 +62,7 @@ public class InsertMemberImfo extends HttpServlet {
 			try {
 				Member member = MemDao.fintById(mem);
 				md.setMember(member);
+				
 				MDDao.add(md);
 				System.out.println("資料新增完成");
 				MemDao.openActive(member);
@@ -74,6 +77,7 @@ public class InsertMemberImfo extends HttpServlet {
 				e.printStackTrace();
 			}
 		} else {
+			System.out.println("第三方帳號");
 			WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 
 			// ==============設定創建帳號時間=======================
@@ -113,6 +117,7 @@ public class InsertMemberImfo extends HttpServlet {
 			IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 			IMemberDetailDao MDDao = (IMemberDetailDao) context.getBean("memberDetailDaoJdbcImpl");
 
+			String type = request.getParameter("type");
 			MemberDetail md = context.getBean(MemberDetail.class);
 			Member mem = context.getBean(Member.class);
 
@@ -122,6 +127,7 @@ public class InsertMemberImfo extends HttpServlet {
 			mem.setPassword(password_AES);
 			mem.setRegisteredtime(registeredtime);
 			mem.setToken(tokenFormat);
+			mem.setType(type);
 
 			md.setAddress(alladdress);
 			md.setBirth(birth);
@@ -138,8 +144,11 @@ public class InsertMemberImfo extends HttpServlet {
 			md.setMember(mem);
 
 			try {
-				int insertMemberId = MemDao.add(mem);
-				mem.setMember_id(insertMemberId);
+				
+				
+				MemDao.add(mem);
+				
+//				MDDao.add(md);
 				MemDao.openActive(mem);
 
 			} catch (SQLException e) {

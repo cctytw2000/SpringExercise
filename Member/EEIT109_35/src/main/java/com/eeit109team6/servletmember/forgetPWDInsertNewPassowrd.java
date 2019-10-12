@@ -53,7 +53,8 @@ public class forgetPWDInsertNewPassowrd extends HttpServlet {
 		mem.setAccount(account);
 		mem.setToken(token);
 		mem.setPassword(password_AES);
-	
+		mem.setType("General");
+		
 
 		try {
 			

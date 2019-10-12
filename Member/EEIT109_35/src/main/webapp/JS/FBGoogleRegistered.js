@@ -42,7 +42,8 @@ function FBLogin() {
 					$.ajax({
 						url: "../Check_Repeat.do",
 						data: {
-							account: response.email
+							account: response.email,
+							type: "Facebook"
 						},
 						type: "POST",
 						success: function (data) {
@@ -51,7 +52,9 @@ function FBLogin() {
 									+ response.email
 									+ "&username="
 									+ response.name
-								
+									+ "&type=" 
+									+ "Facebook"
+									
 							} else {
 								alert("此帳號已重複註冊，請登入")
 								location.href = "http://localhost:8080/EEIT109_35/member/LoginMember.jsp"
@@ -60,7 +63,7 @@ function FBLogin() {
 							console.log(data)
 						}
 					})
-	
+
 				});
 		} else {
 			// user FB取消授權
@@ -128,18 +131,32 @@ function GoogleLogin() {
 						console.log(user_info.gender);
 						console.log(user_info.emails[0].value);
 
-						location.href = "http://localhost:8080/EEIT109_35/member/insertMemberDetail.jsp?account="
-							+ user_info.emails[0].value
-							+ "&username="
-							+ user_info.displayName
-						// $("#user-information div").eq(0).find("span").text(user_info.displayName);
-						// $("#user-information div").eq(1).find("span").text(user_info.id);
-						// $("#user-information div").eq(2).find("span").text(user_info.gender);
-						// $("#user-information div").eq(3).find("span").html('<img src="' + user_info.image.url + '" />');
-						// $("#user-information div").eq(4).find("span").text(user_info.emails[0].value);
+						$.ajax({
+							url: "../Check_Repeat.do",
+							data: {
+								account: user_info.emails[0].value,
+								type: "Google"
+							},
+							type: "POST",
+							success: function (data) {
+								if (data == "true") {
+								
+									location.href = "http://localhost:8080/EEIT109_35/member/insertMemberDetail.jsp?account="
+										+ user_info.emails[0].value
+										+ "&username="
+										+ user_info.displayName
+										+ "&type=" + "Google"
 
-						// $("#user-information").show();
-						// $("#login-button").hide();
+								} else {
+									alert("此帳號已重複註冊，請登入")
+									location.href = "http://localhost:8080/EEIT109_35/member/LoginMember.jsp"
+								}
+
+								console.log(data)
+							}
+						})
+
+
 					},
 					// On error
 					function (error) {

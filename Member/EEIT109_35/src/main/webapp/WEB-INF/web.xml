@@ -105,12 +105,12 @@
 
 
 	
-	
-	<!-- Bootstraps the root web application context before servlet initialization -->
+ 
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	<!-- needed for ContextLoaderListener -->
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext.xml</param-value>

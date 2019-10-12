@@ -26,11 +26,18 @@ public class Check_Repeat extends HttpServlet {
 
 
 		String account = request.getParameter("account");
+		String type = request.getParameter("type");
 		
+		
+		if(type == "") {
+			type ="General";
+		}
+			
 		System.out.println("account="+account);
 		IMemberDao MEMDaoF = null;
 		Member m = context.getBean(Member.class);
 		m.setAccount(account);
+		m.setType(type);
 
 		try {
 			MEMDaoF = (IMemberDao) context.getBean("memberDaoJdbcImpl");

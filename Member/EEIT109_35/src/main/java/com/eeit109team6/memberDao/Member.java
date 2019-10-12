@@ -10,11 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.eeit109team6.memberDetailDao.MemberDetail;
 
 @Component(value = "member")
+@Scope(value = "prototype")
 @Entity
 @Table(name = "member")
 public class Member {
@@ -24,8 +26,10 @@ public class Member {
 	private String registeredtime;
 	private String token;
 	private String username;
+
+	private String type;
 	private int isactive;
-	private MemberDetail memberdetail ;
+	private MemberDetail memberdetail;
 
 	@Column(name = "ACCOUNT")
 	public String getAccount() {
@@ -91,6 +95,7 @@ public class Member {
 	public void setToken(String token) {
 		this.token = token;
 	}
+
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
 	public MemberDetail getMemberdetail() {
 		return memberdetail;
@@ -98,6 +103,15 @@ public class Member {
 
 	public void setMemberdetail(MemberDetail memberdetail) {
 		this.memberdetail = memberdetail;
+	}
+
+	@Column(name = "TYPE")
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }
