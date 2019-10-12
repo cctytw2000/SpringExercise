@@ -28,10 +28,10 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public void add(Member m) throws SQLException {
+	public Integer add(Member m) throws SQLException {
 		System.out.println("sessionFactory" + sessionFactory);
-		sessionFactory.getCurrentSession().save(m);
-	
+		Integer memberid = (Integer) sessionFactory.getCurrentSession().save(m);
+		return memberid;
 
 	}
 
@@ -129,12 +129,11 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 
 		if (memList.size() != 0) {
 			memList.get(0).setToken(m.getToken());
-			return true ;
+			return true;
 		} else {
 			System.out.println("忘記密碼===找不到帳號");
 			return false;
 		}
-		
 
 	}
 

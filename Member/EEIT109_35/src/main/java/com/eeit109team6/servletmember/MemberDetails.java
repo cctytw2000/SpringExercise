@@ -47,14 +47,14 @@ public class MemberDetails extends HttpServlet {
 		mem.setToken(session.getAttribute("token").toString());
 		mem.setMember_id(Integer.parseInt(session.getAttribute("member_id").toString()));
 		mem.setUsername(session.getAttribute("username").toString());
-		IMemberDetailDao MDDao = (IMemberDetailDao) context.getBean("memberDetailDaoJdbcImpl");
+
 		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 		try {
 			
 			Member member = MemDao.fintById(mem);
-			MemberDetail memberDetails = MDDao.fintById(mem);
-			System.out.println("memberDetails  address="+memberDetails.getAddress());
-			request.setAttribute("memberDetail", memberDetails);
+
+
+			request.setAttribute("memberDetail", member.getMemberdetail());
 			request.setAttribute("member", member);
 			RequestDispatcher rd = request.getRequestDispatcher("member/memberDetails.jsp");
 

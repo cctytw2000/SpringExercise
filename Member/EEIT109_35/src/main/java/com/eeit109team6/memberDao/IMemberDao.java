@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public interface IMemberDao {
 
-	public void add(Member m) throws SQLException;
+	public Integer add(Member m) throws SQLException;
 
 	public void update(Member m) throws SQLException;
 
