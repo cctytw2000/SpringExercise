@@ -39,36 +39,32 @@ public class forgetPWDInsertNewPassowrd extends HttpServlet {
 		System.out.println("newpassword=" + newpassword);
 
 		String key = "MickeyKittyLouis";
-		String password_AES = CipherUtils.encryptString(key, newpassword).replaceAll("[\\pP\\p{Punct}]", "").replace(" ",
-				"");
+		String password_AES = CipherUtils.encryptString(key, newpassword).replaceAll("[\\pP\\p{Punct}]", "")
+				.replace(" ", "");
 
-		
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		Member mem = context.getBean(Member.class);
 		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
-		
-		
-		
-		
+
 		mem.setAccount(account);
 		mem.setToken(token);
 		mem.setPassword(password_AES);
 		mem.setType("General");
-		
+		Boolean success = false;
 
-		try {
-			
+		success = MemDao.changePwd(mem);
 
-			MemDao.changePwd(mem);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
+		if (success) {
+			request.setAttribute("msg", "請使用新的密碼登入帳號");
+			RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
+			rd.forward(request, response);
 
+		} else {
+
+			request.setAttribute("msg", "沒有此帳號的資訊");
+			RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
+			rd.forward(request, response);
 		}
-		   request.setAttribute("msg", "請使用新的密碼登入帳號");
-		   RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
-		   rd.forward(request, response);
 
 	}
 

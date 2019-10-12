@@ -40,9 +40,7 @@ public class InsertMemberImfo extends HttpServlet {
 		String alladdress = request.getParameter("alladdress");
 		String sex = request.getParameter("sex");
 		String birth = request.getParameter("birth");
-		
-		
-		
+
 		if (memberID != null && token != null) {
 			System.out.println("一般帳號");
 			WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -59,23 +57,16 @@ public class InsertMemberImfo extends HttpServlet {
 			md.setIdnumber(idnumber);
 			md.setSex(sex);
 
-			try {
-				Member member = MemDao.fintById(mem);
-				md.setMember(member);
-				
-				MDDao.add(md);
-				System.out.println("資料新增完成");
-				MemDao.openActive(member);
-				request.setAttribute("msg", "已開通帳號請至登入頁面登入");
-				RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
-				rd.forward(request, response);
-				
-				
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Member member = MemDao.fintById(mem);
+			md.setMember(member);
+
+			MDDao.add(md);
+			System.out.println("資料新增完成");
+			MemDao.openActive(member);
+			request.setAttribute("msg", "已開通帳號請至登入頁面登入");
+			RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
+			rd.forward(request, response);
+
 		} else {
 			System.out.println("第三方帳號");
 			WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -115,8 +106,6 @@ public class InsertMemberImfo extends HttpServlet {
 			// ==============/設定token====================
 
 			IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
-			IMemberDetailDao MDDao = (IMemberDetailDao) context.getBean("memberDetailDaoJdbcImpl");
-
 			String type = request.getParameter("type");
 			MemberDetail md = context.getBean(MemberDetail.class);
 			Member mem = context.getBean(Member.class);
@@ -143,18 +132,10 @@ public class InsertMemberImfo extends HttpServlet {
 			mem.setMemberdetail(md);
 			md.setMember(mem);
 
-			try {
-				
-				
-				MemDao.add(mem);
-				
-//				MDDao.add(md);
-				MemDao.openActive(mem);
+			MemDao.add(mem);
 
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			MemDao.openActive(mem);
+
 			request.setAttribute("msg", "已完成輸入會員資料及開通帳號");
 			RequestDispatcher rd = request.getRequestDispatcher("member/jump.jsp");
 			rd.forward(request, response);

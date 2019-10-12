@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.SessionFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -34,8 +33,6 @@ import com.eeit109team6.memberDao.Member;
 @WebServlet("/FerGetPWD")
 public class FerGetPWD extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private SessionFactory sessionFactory;
-	private org.hibernate.Session hbSession;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -70,16 +67,8 @@ public class FerGetPWD extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		boolean forget = false;
-		try {
+		boolean forget = MemDao.forgetPwd(mem);
 
-			forget = MemDao.forgetPwd(mem);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-		}
 		if (forget) {
 			String email = null;
 			String pwd = null;

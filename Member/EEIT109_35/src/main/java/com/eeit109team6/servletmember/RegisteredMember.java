@@ -118,13 +118,11 @@ public class RegisteredMember extends HttpServlet {
 
 			ArrayList<Member> members = null;
 			Integer memberId = null;
-			try {
+			
 				memberId = MemDao.add(mem);
 				members = MemDao.fintAll();
 
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+		
 
 			for (Member member : members) {
 				System.out.println("帳號=" + member.getAccount());

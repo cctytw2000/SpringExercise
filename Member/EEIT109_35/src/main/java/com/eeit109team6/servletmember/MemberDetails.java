@@ -22,6 +22,7 @@ import com.eeit109team6.memberDetailDao.MemberDetail;
 @WebServlet("/MemberDetails")
 public class MemberDetails extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
@@ -33,13 +34,12 @@ public class MemberDetails extends HttpServlet {
 		}
 		if (session.getAttribute("account") == null) {
 			System.out.println("session.getAttribute(\"account\").toString() == null");
-			
+
 			response.sendRedirect(getServletContext().getContextPath() + "/home.jsp");
 			return;
 		}
 //		HttpSession session = request.getSession();
 		System.out.println(session.getAttribute("account"));
-
 
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		Member mem = context.getBean(Member.class);
@@ -49,20 +49,14 @@ public class MemberDetails extends HttpServlet {
 		mem.setUsername(session.getAttribute("username").toString());
 
 		IMemberDao MemDao = (IMemberDao) context.getBean("memberDaoJdbcImpl");
-		try {
-			
-			Member member = MemDao.fintById(mem);
 
+		Member member = MemDao.fintById(mem);
 
-			request.setAttribute("memberDetail", member.getMemberdetail());
-			request.setAttribute("member", member);
-			RequestDispatcher rd = request.getRequestDispatcher("member/memberDetails.jsp");
+		request.setAttribute("memberDetail", member.getMemberdetail());
+		request.setAttribute("member", member);
+		RequestDispatcher rd = request.getRequestDispatcher("member/memberDetails.jsp");
 
-			rd.forward(request, response);
-		} catch (SQLException e) {
-		
-			e.printStackTrace();
-		}
+		rd.forward(request, response);
 
 	}
 

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public Integer add(Member m) throws SQLException {
+	public Integer add(Member m)  {
 		System.out.println("sessionFactory" + sessionFactory);
 		Integer memberid = (Integer) sessionFactory.getCurrentSession().save(m);
 		return memberid;
@@ -36,7 +38,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public void update(Member m) throws SQLException {
+	public void update(Member m)  {
 //		String sqlcode = "update member set  account = ?,password = ?,username = ?,idnumber = ?,sex = ?,birth = ? where member_id = ? ";
 //		PreparedStatement state = conn.prepareStatement(sqlcode);
 //		state.setString(1, m.getAccount());
@@ -51,37 +53,38 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public void delete(Member m) throws SQLException {
+	public void delete(Member m)  {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ArrayList<Member> fintAll() throws SQLException {
+	public ArrayList<Member> fintAll()  {
 		Query query = sessionFactory.getCurrentSession().createQuery("from Member");
 		ArrayList<Member> member = (ArrayList<Member>) query.getResultList();
 		return member;
 	}
 
 	@Override
-	public Member fintById(Member m) throws SQLException {
+	public Member fintById(Member m)  {
 
 		List<Member> memList = null;
-		Query query = sessionFactory.getCurrentSession().createQuery("from Member where member_id = ?1 ");
-		query.setParameter(1, m.getMember_id());
-		memList = (List<Member>) query.getResultList();
-
-		if (memList.size() != 0) {
-			memList.get(0);
-			return memList.get(0);
-		} else {
-			return null;
-		}
+//		Query query = sessionFactory.getCurrentSession().createQuery("from Member where member_id = ?1 ");
+		Member member = (Member) sessionFactory.getCurrentSession().get(Member.class, m.getMember_id());
+//		query.setParameter(1, m.getMember_id());
+//		memList = (List<Member>) query.getResultList();
+		return member;
+//		if (memList.size() != 0) {
+//			memList.get(0);
+//			return memList.get(0);
+//		} else {
+//			return null;
+//		}
 
 	}
 
 	@Override
-	public Member login(Member m) throws SQLException {
+	public Member login(Member m)  {
 //		System.out.println("Login  type="+m.getType());
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession()
@@ -100,7 +103,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public boolean openActive(Member m) throws SQLException {
+	public boolean openActive(Member m)  {
 
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession().createQuery("from Member where member_id = ?1 and token = ?2");
@@ -118,7 +121,7 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public boolean forgetPwd(Member m) throws SQLException {
+	public boolean forgetPwd(Member m)  {
 
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account = ?1 and type = ?2");
@@ -138,23 +141,27 @@ public class MemberDaoJdbcImpl implements IMemberDao {
 	}
 
 	@Override
-	public void changePwd(Member m) throws SQLException {
-		List<Member> memList = null;
+	public Boolean changePwd(Member m)  {
+
 		Query query = sessionFactory.getCurrentSession()
 				.createQuery("from Member where account =?1  and token = ?2 and type= ?3");
 		query.setParameter(1, m.getAccount());
 		query.setParameter(2, m.getToken());
 		query.setParameter(3, m.getType());
-		memList = (List<Member>) query.getResultList();
 
-		if (memList.size() != 0) {
-			memList.get(0).setPassword(m.getPassword());
+		try {
+			Member memList = (Member) query.getSingleResult();
+			memList.setPassword(m.getPassword());
+			return true;
+		} catch (NoResultException e) {
+			System.out.println("沒有此帳號");
+			return false;
 		}
 
 	}
 
 	@Override
-	public boolean checkAccount(Member m) throws SQLException {
+	public boolean checkAccount(Member m)  {
 		System.out.println("此帳號為" + m.getType() + "帳號");
 		List<Member> memList = null;
 		Query query = sessionFactory.getCurrentSession().createQuery("from Member where account =?1 and type = ?2");

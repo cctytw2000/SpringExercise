@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import com.eeit109team6.memberDao.Member;
 
 public interface IMemberDetailDao {
-	public void add(MemberDetail md) throws SQLException;
+	public void add(MemberDetail md);
 
-	public void update(MemberDetail md) throws SQLException;
+	public void update(MemberDetail md);
 
-	public void delete(MemberDetail md) throws SQLException;
+	public void delete(MemberDetail md);
 
-	public ArrayList<MemberDetail> fintAll() throws SQLException;
+	public ArrayList<MemberDetail> fintAll();
 
-	public MemberDetail fintById(Member m) throws SQLException;
+	public MemberDetail fintById(Member m);
 
 }

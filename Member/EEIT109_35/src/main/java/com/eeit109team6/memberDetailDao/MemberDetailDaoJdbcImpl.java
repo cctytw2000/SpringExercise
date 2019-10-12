@@ -29,31 +29,31 @@ public class MemberDetailDaoJdbcImpl implements IMemberDetailDao {
 	}
 
 	@Override
-	public void add(MemberDetail md) throws SQLException {
+	public void add(MemberDetail md)  {
 		sessionFactory.getCurrentSession().save(md);
 		
 	}
 
 	@Override
-	public void update(MemberDetail md) throws SQLException {
+	public void update(MemberDetail md)  {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void delete(MemberDetail md) throws SQLException {
+	public void delete(MemberDetail md)  {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ArrayList<MemberDetail> fintAll() throws SQLException {
+	public ArrayList<MemberDetail> fintAll()  {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public MemberDetail fintById(Member m) throws SQLException {
+	public MemberDetail fintById(Member m)  {
 		List<MemberDetail> memList = null;
 		Query query = sessionFactory.getCurrentSession()
 				.createQuery("from MemberDetail where memberID = ?1 ");

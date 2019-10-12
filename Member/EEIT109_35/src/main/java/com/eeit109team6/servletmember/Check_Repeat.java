@@ -2,7 +2,6 @@ package com.eeit109team6.servletmember;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,33 +23,26 @@ public class Check_Repeat extends HttpServlet {
 			throws ServletException, IOException {
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 
-
 		String account = request.getParameter("account");
 		String type = request.getParameter("type");
-		
-		
-		if(type == "") {
-			type ="General";
+
+		if (type == "") {
+			type = "General";
 		}
-			
-		System.out.println("account="+account);
+
+		System.out.println("account=" + account);
 		IMemberDao MEMDaoF = null;
 		Member m = context.getBean(Member.class);
 		m.setAccount(account);
 		m.setType(type);
 
-		try {
-			MEMDaoF = (IMemberDao) context.getBean("memberDaoJdbcImpl");
+		MEMDaoF = (IMemberDao) context.getBean("memberDaoJdbcImpl");
 
-			String check_answ = Boolean.toString(MEMDaoF.checkAccount(m));
-			PrintWriter out = response.getWriter();
-			System.out.println(check_answ);
-			out.write(check_answ);
-			out.close();
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
+		String check_answ = Boolean.toString(MEMDaoF.checkAccount(m));
+		PrintWriter out = response.getWriter();
+		System.out.println(check_answ);
+		out.write(check_answ);
+		out.close();
 
 	}
 
